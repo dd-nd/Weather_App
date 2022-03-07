@@ -2,6 +2,7 @@ package com.example.weatherapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -9,6 +10,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -93,11 +97,16 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
 
+        @SuppressLint("SetTextI18n")
         @Override
         protected void onPostExecute(String result){
             super.onPostExecute(result);
-
-            result_info.setText((result));
+            try {
+                JSONObject jsonObject = new JSONObject(result);
+                result_info.setText("Температура: " + jsonObject.getJSONObject("main").getDouble("temp"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
     }
